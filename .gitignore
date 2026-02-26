@@ -1,0 +1,5 @@
+target/
+Reports/*.html
+Reports/*.json
+.idea/
+*.iml

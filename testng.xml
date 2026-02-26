@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sequifi E2ETC100 Regression Suite" parallel="false">
+
+    <test name="E2ETC100 - Full Regression">
+        <classes>
+            <class name="TestRunner.E2ETC100Runner"/>
+        </classes>
+    </test>
+
+    <test name="Settings - Location, Department, Tiers, Product">
+        <classes>
+            <class name="TestRunner.SettingsRunner"/>
+        </classes>
+    </test>
+
+</suite>
