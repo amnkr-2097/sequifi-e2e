@@ -159,6 +159,7 @@ public class pgGeneric {
     }
 
     public void selectDropdownFromOption(By dropdownTrigger, String optionText) {
+        WebDriverWait wait = getExplicitWait(10);
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdownTrigger));
         dropdown.click();
 
@@ -223,7 +224,7 @@ public class pgGeneric {
         ));
     }
 
-    // ---- Date generators ----
+    // ----------------------------------------------------Date Method--------------------------------------------------
     /**
         If date to be ahead of today then enter +ve integer
         If date to be behind of today then enter -ve integer

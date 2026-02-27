@@ -13,10 +13,10 @@ public class pgTiers extends pgGeneric {
     private static final By ADD_NEW_BUTTON      = By.id("admin_settings_location_Add_New_Location_Button");
     private static final By SCHEMA_NAME_INPUT   = By.cssSelector("input[name='schema_name']");
     private static final By SCHEMA_DESC_INPUT   = By.cssSelector("textarea[name='schema_description']");
-    private static final By TIER_SYSTEM_DROPDOWN  = By.cssSelector("[name='tier_system_id']");
-    private static final By TIER_METRICS_DROPDOWN = By.cssSelector("[name='tier_metrics_id']");
-    private static final By TIER_TYPE_DROPDOWN    = By.cssSelector("[name='tier_type']");
-    private static final By SAVE_BUTTON         = By.xpath("//button[contains(text(),'Save')]");
+    private static final By TIER_SYSTEM_DROPDOWN  = By.xpath("//*[@name='tier_system_id']/ancestor::div[@data-pc-name='dropdown']");
+    private static final By TIER_METRICS_DROPDOWN = By.xpath("//*[@name='tier_metrics_id']/ancestor::div[@data-pc-name='dropdown']");
+    private static final By TIER_TYPE_DROPDOWN    = By.xpath("//input[@name='tier_type']/ancestor::div[@data-pc-name='dropdown']");
+    private static final By SAVE_BUTTON         = By.xpath("//*[contains(text(),'Save')]");
     private static final By SEARCH_INPUT        = By.cssSelector("input[placeholder*='Search'], input[type='search']");
     private static final By SUCCESS_TOAST       = By.cssSelector(".toast-success, .Toastify__toast--success, [class*='success']");
 
@@ -39,7 +39,7 @@ public class pgTiers extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(ADD_NEW_BUTTON));
         btn.click();
-        test.log(Status.INFO, "Clicked 'Add New' tier button.");
+        test.log(Status.PASS, "Clicked 'Add New' tier button.");
         pause(1);
     }
 
@@ -47,46 +47,57 @@ public class pgTiers extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(SCHEMA_NAME_INPUT));
         field.clear();
-        field.sendKeys(name);
-        test.log(Status.INFO, "Entered tier schema name: " + name);
+        String StrName  = name + (int) Math.floor(Math.random() * 100);
+        field.sendKeys(StrName);
+        pgProjectExpectedVariables.setTierSchemaName("Tier Schema Name" , StrName);
+        test.log(Status.PASS, "Tier Scheme Name is Set as : " + StrName);
     }
 
     public void enterSchemaDescription(String description) {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(SCHEMA_DESC_INPUT));
         field.clear();
-        field.sendKeys(description);
-        test.log(Status.INFO, "Entered tier schema description.");
-    }
-
-    public void selectDropdownOption(By dropdownLocator, String optionText, String fieldName) {
-        WebDriverWait wait = getExplicitWait(10);
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdownLocator));
-        dropdown.click();
-        pause(1);
-
-        By option = By.xpath("//*[contains(@class,'option') and contains(text(),'" + optionText + "')]");
-        try {
-            WebElement opt = wait.until(ExpectedConditions.elementToBeClickable(option));
-            opt.click();
-        } catch (Exception e) {
-            dropdown.sendKeys(optionText);
-            pause(1);
-            dropdown.sendKeys(Keys.ENTER);
-        }
-        test.log(Status.INFO, "Selected " + fieldName + ": " + optionText);
+        String  strDis = description + (int) Math.floor(Math.random() * 100);
+        field.sendKeys(strDis);
+        pgProjectExpectedVariables.setTierSchemaDescription("Tier Schema Description" , strDis);
+        test.log(Status.PASS, "Tier Scheme Description is Set as : " + description);
     }
 
     public void selectTierSystem(String value) {
-        selectDropdownOption(TIER_SYSTEM_DROPDOWN, value, "Tier System");
+        if(value.equalsIgnoreCase("NA") || value.equalsIgnoreCase("N/A")) {
+            pgProjectExpectedVariables.setTierTierSystem("Tier System" , value);
+            test.log(Status.PASS, "Tier System is N/A");
+        }
+        else {
+            selectByVisibleText(TIER_SYSTEM_DROPDOWN,value);
+            pgProjectExpectedVariables.setTierTierSystem("Tier System" , value);
+            test.log(Status.PASS, "Tier System is Set as: " + value);
+        }
     }
 
     public void selectTierMetrics(String value) {
-        selectDropdownOption(TIER_METRICS_DROPDOWN, value, "Tier Metrics");
+
+        if(value.equalsIgnoreCase("NA") || value.equalsIgnoreCase("N/A")) {
+            pgProjectExpectedVariables.setTierTierMetrics("Tier Metrics" , value);
+            test.log(Status.PASS, "Tier Metrics is N/A");
+        }
+        else {
+            selectByVisibleText(TIER_METRICS_DROPDOWN,value);
+            pgProjectExpectedVariables.setTierTierMetrics("Tier Metrics" , value);
+            test.log(Status.PASS, "Tier Metrics is Set as: " + value);
+        }
     }
 
     public void selectTierType(String value) {
-        selectDropdownOption(TIER_TYPE_DROPDOWN, value, "Tier Type");
+        if(value.equalsIgnoreCase("NA") || value.equalsIgnoreCase("N/A")) {
+            pgProjectExpectedVariables.setTierTierTypes("Tier Type" , value);
+            test.log(Status.PASS, "Tier Type is N/A");
+        }
+        else {
+            selectByVisibleText(TIER_TYPE_DROPDOWN,value);
+            pgProjectExpectedVariables.setTierTierTypes("Tier Type" , value);
+            test.log(Status.PASS, "Tier Type is Set as: " + value);
+        }
     }
 
     public void clickSaveButton() {
@@ -101,16 +112,16 @@ public class pgTiers extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(SUCCESS_TOAST));
-//            test.log(Status.PASS, "Tier '" + schemaName + "' created successfully.");
+            test.log(Status.PASS, "Tier '" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "' created successfully.");
             return true;
         } catch (Exception e) {
             try {
-//                By tierInList = By.xpath("//*[contains(text(),'" + schemaName + "')]");
-//                wait.until(ExpectedConditions.visibilityOfElementLocated(tierInList));
-//                test.log(Status.PASS, "Tier '" + schemaName + "' found in list.");
+                By tierInList = By.xpath("//*[contains(text(),'" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "')]");
+                wait.until(ExpectedConditions.visibilityOfElementLocated(tierInList));
+                test.log(Status.PASS, "Tier '" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + " found in list.");
                 return true;
             } catch (Exception ex) {
-//                test.log(Status.FAIL, "Tier '" + schemaName + "' not found after creation.");
+                test.log(Status.FAIL, "Tier '" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + " not found after creation.");
                 return false;
             }
         }
@@ -120,20 +131,21 @@ public class pgTiers extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement searchField = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_INPUT));
         searchField.clear();
-//        searchField.sendKeys(searchTerm);
-//        test.log(Status.INFO, "Searched for tier: " + searchTerm);
+        searchField.sendKeys(pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name"));
+        test.log(Status.PASS, "Searched for tier: " + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name"));
         pause(2);
     }
 
     public boolean verifyTierInList() {
         WebDriverWait wait = getExplicitWait(10);
         try {
-//            By tierRow = By.xpath("//tr[contains(.,'" + schemaName + "')] | //*[contains(@class,'row') and contains(.,'" + schemaName + "')] | //*[contains(@class,'card') and contains(.,'" + schemaName + "')]");
-//            wait.until(ExpectedConditions.visibilityOfElementLocated(tierRow));
-//            test.log(Status.PASS, "Tier '" + schemaName + "' found in list.");
+            By tierRow = By.xpath("//tr[contains(.,'" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "')] | //*[contains(@class,'row') and contains(.,'" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "')] | //*[contains(@class,'card') and contains(.,'"
+                    + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "')]");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(tierRow));
+            test.log(Status.PASS, "Tier '" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "' found in list.");
             return true;
         } catch (Exception e) {
-//            test.log(Status.FAIL, "Tier '" + schemaName + "' not found in list.");
+            test.log(Status.FAIL, "Tier '" + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name") + "' not found in list.");
             return false;
         }
     }

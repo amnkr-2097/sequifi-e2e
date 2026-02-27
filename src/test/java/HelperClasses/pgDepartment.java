@@ -55,7 +55,7 @@ public class pgDepartment extends pgGeneric {
             pause(3);
             WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(DEPT_NAME_INPUT));
             field.clear();
-            String strName = name + (int) Math.floor(Math.random() * 10);
+            String strName = name + (int) Math.floor(Math.random() * 100);
             field.sendKeys(strName);
             pgProjectExpectedVariables.setDeptChildDepartment("Child Department Name", strName);
             test.log(Status.PASS, "Child Department name set as : " + pgProjectExpectedVariables.getDeptChildDepartment("Child Department Name"));
