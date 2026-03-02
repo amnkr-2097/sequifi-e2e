@@ -7,10 +7,11 @@
         </classes>
     </test>
 
-    <test name="Settings - Location, Department, Tiers, Product">
+    <test name="E2ETC200 - End to End Test Case for Solar" parallel="false">
         <classes>
-            <class name="TestRunner.SettingsRunner"/>
+            <class name="TestRunner.TestRunner"/>
         </classes>
     </test>
+
 
 </suite>

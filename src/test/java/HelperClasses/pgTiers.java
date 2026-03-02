@@ -133,7 +133,7 @@ public class pgTiers extends pgGeneric {
         searchField.clear();
         searchField.sendKeys(pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name"));
         test.log(Status.PASS, "Searched for tier: " + pgProjectExpectedVariables.getTierSchemaName("Tier Schema Name"));
-        pause(2);
+        pause(3);
     }
 
     public boolean verifyTierInList() {

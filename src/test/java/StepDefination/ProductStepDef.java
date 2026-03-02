@@ -2,6 +2,7 @@ package StepDefination;
 
 import HelperClasses.pgGeneric;
 import HelperClasses.pgProduct;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 
 public class ProductStepDef extends pgGeneric {
@@ -38,6 +39,11 @@ public class ProductStepDef extends pgGeneric {
         pgProductObj.enterProductRedline(redline);
     }
 
+    @And("user selects product milestone schema last created milestone")
+    public void userSelectsProductMilestoneSchema() {
+        pgProductObj.selectMilestoneSchema();
+    }
+
     @And("user enters product effective date as today")
     public void userEntersProductEffectiveDateAsToday() {
         pgProductObj.enterEffectiveDateToday();
@@ -48,22 +54,27 @@ public class ProductStepDef extends pgGeneric {
         pgProductObj.clickCreateButton();
     }
 
-    @Then("verify product {string} is created successfully")
-    public void verifyProductCreatedSuccessfully(String productName) {
-        if (!pgProductObj.verifyProductCreated(productName)) {
-            throw new AssertionError("Product '" + productName + "' was not created successfully.");
+    @Then("verify product is created successfully")
+    public void verifyProductCreatedSuccessfully() {
+        if (!pgProductObj.verifyProductCreated()) {
+            throw new AssertionError("Product was not created successfully.");
         }
     }
 
-    @When("user searches for product {string}")
-    public void userSearchesForProduct(String searchTerm) {
-        pgProductObj.searchProduct(searchTerm);
+    @When("user searches for product")
+    public void userSearchesForProduct() {
+        pgProductObj.searchProduct();
     }
 
-    @Then("verify product {string} appears in the product list")
-    public void verifyProductAppearsInList(String productName) {
-        if (!pgProductObj.verifyProductInList(productName)) {
-            throw new AssertionError("Product '" + productName + "' not found in the list.");
+    @Then("verify product appears in the product list")
+    public void verifyProductAppearsInList() {
+        if (!pgProductObj.verifyProductInList()) {
+            throw new AssertionError("Product not found in the list.");
         }
+    }
+
+    @And("user selects the override eligibility")
+    public void userSelectsTheOverrideEligibility() {
+        pgProductObj.selectOverrideEligibility();
     }
 }

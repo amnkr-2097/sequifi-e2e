@@ -17,10 +17,11 @@ public class pgProduct extends pgGeneric {
     private static final By NAME_INPUT          = By.cssSelector("input[name='name'][placeholder*='Product Name']");
     private static final By PRODUCT_IDS_INPUT   = By.cssSelector("input[name='product_ids']");
     private static final By DESCRIPTION_INPUT   = By.cssSelector("textarea[name='description']");
-    private static final By MILESTONE_DROPDOWN  = By.cssSelector("[name='milestone_schema_id']");
+    private static final By MILESTONE_DROPDOWN  = By.xpath("//*[@name='milestone_schema_id']/ancestor::div[@data-pc-name='dropdown']");
     private static final By PRODUCT_REDLINE     = By.cssSelector("input[name='product_redline']");
+    private static final By OVERRIDE_ELIGIBILITY = By.cssSelector("div[id='Override_Eligiblity_Dropdown']");
     private static final By EFFECTIVE_DATE      = By.cssSelector("input[name='effective_date']");
-    private static final By CREATE_BUTTON       = By.xpath("//button[contains(text(),'Create')]");
+    private static final By CREATE_BUTTON       = By.xpath("//*[contains(text(),'Create')]");
     private static final By SEARCH_INPUT        = By.id("position_table_Global_Search");
     private static final By SUCCESS_TOAST       = By.cssSelector(".toast-success, .Toastify__toast--success, [class*='success']");
 
@@ -41,6 +42,7 @@ public class pgProduct extends pgGeneric {
 
     public void clickAddNew() {
         WebDriverWait wait = getExplicitWait(10);
+        refreshPage();
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(ADD_NEW_BUTTON));
         btn.click();
         test.log(Status.INFO, "Clicked 'Add New' product button.");
@@ -51,7 +53,9 @@ public class pgProduct extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(NAME_INPUT));
         field.clear();
-        field.sendKeys(name);
+        String StrName  = name + (int) Math.floor(Math.random() * 100);
+        field.sendKeys(StrName);
+        pgProjectExpectedVariables.setProdName("Product Name" , StrName);
         test.log(Status.INFO, "Entered product name: " + name);
     }
 
@@ -59,9 +63,12 @@ public class pgProduct extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(PRODUCT_IDS_INPUT));
         field.clear();
-        field.sendKeys(productId);
+        String StrID  = productId + (int) Math.floor(Math.random() * 1000);
+        field.sendKeys(StrID);
+        field.sendKeys(StrID);
         field.sendKeys(Keys.ENTER);
-        test.log(Status.INFO, "Entered product ID: " + productId);
+        pgProjectExpectedVariables.setProdProductId("Product ID", StrID);
+        test.log(Status.INFO, "Entered product ID: " + StrID);
         pause(1);
     }
 
@@ -69,8 +76,10 @@ public class pgProduct extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(DESCRIPTION_INPUT));
         field.clear();
-        field.sendKeys(description);
-        test.log(Status.INFO, "Entered product description.");
+        String strDes = description + (int) Math.floor(Math.random()*100);
+        field.sendKeys(strDes);
+        pgProjectExpectedVariables.setProdDescription("Product Description", strDes);
+        test.log(Status.INFO, "Entered product description: " + strDes);
     }
 
     public void enterProductRedline(String redline) {
@@ -78,13 +87,26 @@ public class pgProduct extends pgGeneric {
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(PRODUCT_REDLINE));
         field.clear();
         field.sendKeys(redline);
+        pgProjectExpectedVariables.setProdRedline("Product Redline", redline);
         test.log(Status.INFO, "Entered product redline: " + redline);
     }
 
+    public void selectMilestoneSchema() {
+        selectByPartialText(MILESTONE_DROPDOWN, pgProjectExpectedVariables.getMileSchemaName("Milestone Schema Name"));
+        test.log(Status.PASS, "Milestone Schema is Set for the product as: " + pgProjectExpectedVariables.getMileSchemaName("Milestone Schema Name"));
+    }
+
+
+    public void selectOverrideEligibility() {
+        selectByVisibleText(OVERRIDE_ELIGIBILITY, pgProjectExpectedVariables.getMileMilestoneName_Initial("Milestone Trigger Name 1"));
+        test.log(Status.PASS, "Override Eligibility is Set for the product as: " + pgProjectExpectedVariables.getMileMilestoneName_Initial("Milestone Trigger Name 1"));
+    }
+
     public void enterEffectiveDateToday() {
-        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        setReactDateField(EFFECTIVE_DATE, today);
-        test.log(Status.INFO, "Entered product effective date: " + today);
+        selectPastDate(EFFECTIVE_DATE,14);
+        pause(2);
+        pgProjectExpectedVariables.setProdEffectiveDate("Product Effective Date", daysFromToday(-14));
+        test.log(Status.PASS, "Entered product effective date: " + daysFromToday(-14));
     }
 
     public void clickCreateButton() {
@@ -95,43 +117,45 @@ public class pgProduct extends pgGeneric {
         pause(2);
     }
 
-    public boolean verifyProductCreated(String productName) {
+    public boolean verifyProductCreated() {
         WebDriverWait wait = getExplicitWait(10);
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(SUCCESS_TOAST));
-            test.log(Status.PASS, "Product '" + productName + "' created successfully.");
+            test.log(Status.PASS, "Product '" + pgProjectExpectedVariables.getProdName("Product Name") + "' created successfully.");
             return true;
         } catch (Exception e) {
             try {
-                By productInList = By.xpath("//*[contains(text(),'" + productName + "')]");
+                By productInList = By.xpath("//*[contains(text(),'" + pgProjectExpectedVariables.getProdName("Product Name") + "')]");
                 wait.until(ExpectedConditions.visibilityOfElementLocated(productInList));
-                test.log(Status.PASS, "Product '" + productName + "' found in list.");
+                test.log(Status.PASS, "Product '" + pgProjectExpectedVariables.getProdName("Product Name") + "' found in list.");
                 return true;
             } catch (Exception ex) {
-                test.log(Status.FAIL, "Product '" + productName + "' not found after creation.");
+                test.log(Status.FAIL, "Product '" + pgProjectExpectedVariables.getProdName("Product Name") + "' not found after creation.");
                 return false;
             }
         }
     }
 
-    public void searchProduct(String searchTerm) {
+    public void searchProduct() {
         WebDriverWait wait = getExplicitWait(10);
         WebElement searchField = wait.until(ExpectedConditions.visibilityOfElementLocated(SEARCH_INPUT));
         searchField.clear();
-        searchField.sendKeys(searchTerm);
-        test.log(Status.INFO, "Searched for product: " + searchTerm);
+        searchField.sendKeys(pgProjectExpectedVariables.getProdName("Product Name"));
+        test.log(Status.PASS, "Searched for product: " + pgProjectExpectedVariables.getProdName("Product Name"));
         pause(2);
     }
 
-    public boolean verifyProductInList(String productName) {
+    public boolean verifyProductInList() {
         WebDriverWait wait = getExplicitWait(10);
         try {
-            By productRow = By.xpath("//tr[contains(.,'" + productName + "')] | //*[contains(@class,'row') and contains(.,'" + productName + "')] | //*[contains(@class,'card') and contains(.,'" + productName + "')]");
+            By productRow = By.xpath("//tr[contains(.,'" + pgProjectExpectedVariables.getProdName("Product Name") + "')] | //*[contains(@class,'row') and contains(.,'"
+                    + pgProjectExpectedVariables.getProdName("Product Name") + "')] | //*[contains(@class,'card') and contains(.,'"
+                    + pgProjectExpectedVariables.getProdName("Product Name") + "')]");
             wait.until(ExpectedConditions.visibilityOfElementLocated(productRow));
-            test.log(Status.PASS, "Product '" + productName + "' found in list.");
+            test.log(Status.PASS, "Product '" + pgProjectExpectedVariables.getProdName("Product Name") + "' found in list.");
             return true;
         } catch (Exception e) {
-            test.log(Status.FAIL, "Product '" + productName + "' not found in list.");
+            test.log(Status.FAIL, "Product '" + pgProjectExpectedVariables.getProdName("Product Name") + "' not found in list.");
             return false;
         }
     }

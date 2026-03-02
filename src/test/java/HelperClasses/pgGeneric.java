@@ -1,8 +1,5 @@
 package HelperClasses;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import com.aventstack.extentreports.ExtentReports;
@@ -58,6 +55,11 @@ public class pgGeneric {
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
             driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         }
+    }
+
+    public static void refreshPage() {
+        driver.navigate().refresh();
+        test.log(Status.INFO, "Page is Refreshed");
     }
 
     public static void quitDriver() {
@@ -169,6 +171,17 @@ public class pgGeneric {
         test.log(Status.INFO, "Selected: " + optionText);
     }
 
+    public void selectByPartialText(By locator, String partialText) {
+        WebDriverWait wait = getExplicitWait(10);
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        element.click();
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(normalize-space(.), '" + partialText + "')]")
+        )).click();
+        test.log(Status.INFO, "Selected (partial match): " + partialText);
+    }
+
+
     public String selectRandom(By dropdownTrigger) {
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdownTrigger));
         dropdown.click();
@@ -185,7 +198,7 @@ public class pgGeneric {
 
     private WebElement findOption(WebElement dropdown, String optionText) {
         // Strategy 1: aria-controls link
-        String panelId = dropdown.getAttribute("aria-controls");
+        String panelId = dropdown.getDomAttribute("aria-controls");
         if (panelId != null && !panelId.isEmpty()) {
             return wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//*[@id='" + panelId + "']//li[normalize-space(.)='" + optionText + "']")
@@ -206,7 +219,7 @@ public class pgGeneric {
     }
 
     private List<WebElement> findAllOptions(WebElement dropdown) {
-        String panelId = dropdown.getAttribute("aria-controls");
+        String panelId = dropdown.getDomAttribute("aria-controls");
         if (panelId != null && !panelId.isEmpty()) {
             return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
                     By.xpath("//*[@id='" + panelId + "']//li")
@@ -248,7 +261,6 @@ public class pgGeneric {
     // ---- Core: enter date into PrimeReact Calendar input ----
 
     public void enterDate(By fieldLocator, String date) {
-//        WebDriver driver = DriverManager.getDriver();
         WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(15));
         WebElement input = wait1.until(ExpectedConditions.elementToBeClickable(fieldLocator));
         input.click();
@@ -271,6 +283,10 @@ public class pgGeneric {
         test.log(Status.INFO, "Entered date: " + date);
     }
 
+
+    /*
+    /label[normalize-space(.)='Effective Date ']//input//*[normalize-space(text())='Effective Date ']/ancestor::div[1]//input//*[normalize-space(text())='Effective Date ']/following::input[1]
+     */
     // ---- Shortcut methods ----
 
     public void selectToday(By fieldLocator) {

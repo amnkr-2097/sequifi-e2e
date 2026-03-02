@@ -4,7 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-    tags = "@department",
+    tags = "@E2ETC2008",
     features = {"Feature File/E2ETC200.feature"},
     glue = {"StepDefination"},
     plugin = {
