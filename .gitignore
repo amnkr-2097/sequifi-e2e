@@ -3,5 +3,3 @@ Reports/*.html
 Reports/*.json
 .idea/
 *.iml
-.claude/
-
