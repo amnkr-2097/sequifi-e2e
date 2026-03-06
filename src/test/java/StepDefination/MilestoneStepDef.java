@@ -47,9 +47,6 @@ public class MilestoneStepDef extends pgGeneric {
         pgMilestoneObj.captureAllTriggerData();
     }
 
-    /*
-check
- */
     @And("user clicks add trigger button")
     public void userClicksAddTrigger() {
         pgMilestoneObj.clickAddTriggerButton();

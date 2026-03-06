@@ -10,7 +10,7 @@ public class pgProjectExpectedVariables {
     private static final Map<String, String> locLocationCode = new HashMap<>();
     private static final Map<String, String> locEffectiveDate = new HashMap<>();
     private static final Map<String, String> locRedlineMin = new HashMap<>();
-    private static final Map<String, String> locRedlineMax = new HashMap<>();
+    private static final Map<String, String> locRedlineMax = new HashMap<>  ();
     private static final Map<String, String> locRedlineStd = new HashMap<>();
     private static final Map<String, String> locOfficeName = new HashMap<>();
     private static final Map<String, String> locOfficeAddress = new HashMap<>();
@@ -55,6 +55,58 @@ public class pgProjectExpectedVariables {
     private static final Map<String, String> posTierSchema = new HashMap<>();
     private static final Map<String, String> posMilestoneSchema = new HashMap<>();
     private static final Map<String, String> posEffectiveDate = new HashMap<>();
+    // ── Position Setup Variables ─────────────────────────────────────────────────
+
+    // Wages
+    private static final Map<String, String> posSetupWagesEnabled       = new HashMap<>();
+    private static final Map<String, String> posSetupWagesType          = new HashMap<>();
+    private static final Map<String, String> posSetupWagesAmount        = new HashMap<>();
+
+    // Commission —  Product
+    private static final Map<String, String> posSetupCommissionEnabled  = new HashMap<>();
+    private static final Map<String, String> posSetupCommProduct = new HashMap<>();
+    private static final Map<String, String> posSetupCommType    = new HashMap<>();
+    private static final Map<String, String> posSetupCommAmount  = new HashMap<>();
+    private static final Map<String, String> posSetupCommTier    = new HashMap<>();
+    private static final Map<String, String> posSetupCommAdvance = new HashMap<>();
+
+
+    // Upfront —  Product
+    private static final Map<String, String> posSetupUpfrontEnabled     = new HashMap<>();
+    private static final Map<String, String> posSetupUpfProduct  = new HashMap<>();
+    private static final Map<String, String> posSetupUpfType     = new HashMap<>();
+    private static final Map<String, String> posSetupUpfAmount   = new HashMap<>();
+    private static final Map<String, String> posSetupUpfTier     = new HashMap<>();
+    private static final Map<String, String> posSetupUpfAdvance  = new HashMap<>();
+
+    // Override —  Product
+    private static final Map<String, String> posSetupOverrideEnabled    = new HashMap<>();
+    private static final Map<String, String> posSetupOvrProduct  = new HashMap<>();
+    private static final Map<String, String> posSetupOvrType     = new HashMap<>();
+    private static final Map<String, String> posSetupOvrAmount   = new HashMap<>();
+    private static final Map<String, String> posSetupOvrTier     = new HashMap<>();
+    private static final Map<String, String> posSetupOvrAdvance  = new HashMap<>();
+
+    //  Tab
+    private static final Map<String, String> posSetupDefCommType        = new HashMap<>();
+    private static final Map<String, String> posSetupDefCommAmount      = new HashMap<>();
+    private static final Map<String, String> posSetupDefUpfType         = new HashMap<>();
+    private static final Map<String, String> posSetupDefUpfAmount       = new HashMap<>();
+    private static final Map<String, String> posSetupDefOvrType         = new HashMap<>();
+    private static final Map<String, String> posSetupDefOvrAmount       = new HashMap<>();
+
+    // Variables for Hire Rep
+    private static final Map<String, String> hireFirstName = new HashMap<>();
+    private static final Map<String, String> hireLastName = new HashMap<>();
+    private static final Map<String, String> hireEmail = new HashMap<>();
+    private static final Map<String, String> hirePhone = new HashMap<>();
+    private static final Map<String, String> hireState = new HashMap<>();
+    private static final Map<String, String> hireOffice = new HashMap<>();
+    private static final Map<String, String> hireDepartment = new HashMap<>();
+    private static final Map<String, String> hirePosition = new HashMap<>();
+    private static final Map<String, String> hireManager = new HashMap<>();
+
+
 
     /**
      *
@@ -166,19 +218,88 @@ public class pgProjectExpectedVariables {
     public static void setPosUpfrontPay(String key, String value) {posUpfrontPay.put(key, value);}
     public static String getPosUpfrontPay(String key) {return posUpfrontPay.get(key);}
 
-    public static void setPosDepartment(String key, String value) {posDepartment.put(key, value);}
-    public static String getPosDepartment(String key) {return posDepartment.get(key);}
-
-    public static void setPosProduct(String key, String value) {posProduct.put(key, value);}
-    public static String getPosProduct(String key) {return posProduct.get(key);}
-
-    public static void setPosTierSchema(String key, String value) {posTierSchema.put(key, value);}
-    public static String getPosTierSchema(String key) {return posTierSchema.get(key);}
-
-    public static void setPosMilestoneSchema(String key, String value) {posMilestoneSchema.put(key, value);}
-    public static String getPosMilestoneSchema(String key) {return posMilestoneSchema.get(key);}
-
     public static void setPosEffectiveDate(String key, String value) {posEffectiveDate.put(key, value);}
     public static String getPosEffectiveDate(String key) {return posEffectiveDate.get(key);}
+
+    public static void setPosSetupWagesEnabled(String key, String v)       { posSetupWagesEnabled.put(key, v); }
+    public static String getPosSetupWagesEnabled(String key)               { return posSetupWagesEnabled.get(key); }
+    public static void setPosSetupWagesType(String key, String v)          { posSetupWagesType.put(key, v); }
+    public static String getPosSetupWagesType(String key)                  { return posSetupWagesType.get(key); }
+    public static void setPosSetupWagesAmount(String key, String v)        { posSetupWagesAmount.put(key, v); }
+    public static String getPosSetupWagesAmount(String key)                { return posSetupWagesAmount.get(key); }
+
+    public static void setPosSetupCommissionEnabled(String key, String v)  { posSetupCommissionEnabled.put(key, v); }
+    public static String getPosSetupCommissionEnabled(String key)          { return posSetupCommissionEnabled.get(key); }
+    public static void setPosSetupCommProduct(String key, String v) { posSetupCommProduct.put(key, v); }
+    public static String getPosSetupCommProduct(String key)         { return posSetupCommProduct.get(key); }
+
+    public static void setPosSetupCommTypeSetter(String key, String v)    { posSetupCommType.put(key, v); }
+    public static String getPosSetupCommTypeSetter(String key)            { return posSetupCommType.get(key); }
+    public static void setPosSetupCommAmountSetter(String key, String v)  { posSetupCommAmount.put(key, v); }
+    public static String getPosSetupCommAmountSetter(String key)          { return posSetupCommAmount.get(key); }
+
+
+    public static void setPosSetupCommTypeCloser(String key, String v)    { posSetupCommType.put(key, v); }
+    public static String getPosSetupCommTypeCloser(String key)            { return posSetupCommType.get(key); }
+    public static void setPosSetupCommAmountCloser(String key, String v)  { posSetupCommAmount.put(key, v); }
+    public static String getPosSetupCommAmountCloser(String key)          { return posSetupCommAmount.get(key); }
+
+
+    public static void setPosSetupCommTypeSelfGen(String key, String v)    { posSetupCommType.put(key, v); }
+    public static String getPosSetupCommTypeSelfGen(String key)            { return posSetupCommType.get(key); }
+    public static void setPosSetupCommAmountSelfGen(String key, String v)  { posSetupCommAmount.put(key, v); }
+    public static String getPosSetupCommAmountSelfGen(String key)          { return posSetupCommAmount.get(key); }
+
+    public static void setPosSetupCommTier(String key, String v)    { posSetupCommTier.put(key, v); }
+    public static String getPosSetupCommTier(String key)            { return posSetupCommTier.get(key); }
+    public static void setPosSetupCommAdvance(String key, String v) { posSetupCommAdvance.put(key, v); }
+    public static String getPosSetupCommAdvance(String key)         { return posSetupCommAdvance.get(key); }
+
+
+    // Commission Tab — Per-product panel fields (Percent, Calculated, Unlock Hiring, Limit, Limit Type)
+    private static final Map<String, String> posSetupCommPercent   = new HashMap<>();
+    private static final Map<String, String> posSetupCommCalculated = new HashMap<>();
+    private static final Map<String, String> posSetupCommLimit      = new HashMap<>();
+    private static final Map<String, String> posSetupCommLimitType  = new HashMap<>();
+
+    public static void setPosSetupCommPercent(String k, String v)    { posSetupCommPercent.put(k, v); }
+    public static String getPosSetupCommPercent(String k)            { return posSetupCommPercent.get(k); }
+
+    public static void setPosSetupCommCalculated(String k, String v) { posSetupCommCalculated.put(k, v); }
+    public static String getPosSetupCommCalculated(String k)         { return posSetupCommCalculated.get(k); }
+
+    public static void setPosSetupCommLimit(String k, String v)      { posSetupCommLimit.put(k, v); }
+    public static String getPosSetupCommLimit(String k)              { return posSetupCommLimit.get(k); }
+
+    public static void setPosSetupCommLimitType(String k, String v)  { posSetupCommLimitType.put(k, v); }
+    public static String getPosSetupCommLimitType(String k)          { return posSetupCommLimitType.get(k); }
+
+    // Hire Rep getters and setters
+    public static void setHireFirstName(String key, String value) {hireFirstName.put(key, value);}
+    public static String getHireFirstName(String key) {return hireFirstName.get(key);}
+
+    public static void setHireLastName(String key, String value) {hireLastName.put(key, value);}
+    public static String getHireLastName(String key) {return hireLastName.get(key);}
+
+    public static void setHireEmail(String key, String value) {hireEmail.put(key, value);}
+    public static String getHireEmail(String key) {return hireEmail.get(key);}
+
+    public static void setHirePhone(String key, String value) {hirePhone.put(key, value);}
+    public static String getHirePhone(String key) {return hirePhone.get(key);}
+
+    public static void setHireState(String key, String value) {hireState.put(key, value);}
+    public static String getHireState(String key) {return hireState.get(key);}
+
+    public static void setHireOffice(String key, String value) {hireOffice.put(key, value);}
+    public static String getHireOffice(String key) {return hireOffice.get(key);}
+
+    public static void setHireDepartment(String key, String value) {hireDepartment.put(key, value);}
+    public static String getHireDepartment(String key) {return hireDepartment.get(key);}
+
+    public static void setHirePosition(String key, String value) {hirePosition.put(key, value);}
+    public static String getHirePosition(String key) {return hirePosition.get(key);}
+
+    public static void setHireManager(String key, String value) {hireManager.put(key, value);}
+    public static String getHireManager(String key) {return hireManager.get(key);}
 
 }

@@ -71,6 +71,7 @@ public class pgMilestone extends pgGeneric{
     }
 
     public void clickAddNew() {
+        refreshPage();
         WebDriverWait wait = getExplicitWait(10);
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(ADD_NEW_BUTTON));
         btn.click();
@@ -128,11 +129,7 @@ public class pgMilestone extends pgGeneric{
     }
 
     public void clickAddTriggerButton() {
-        List<WebElement> addButtons = driver.findElements(ADD_TRIGGER_BUTTON);
-        if (!addButtons.isEmpty()) {
-            addButtons.get(addButtons.size() - 1).click();
-            pause(1);
-        }
+        click(ADD_TRIGGER_BUTTON);
         test.log(Status.PASS, "Add trigger button clicked");
     }
 

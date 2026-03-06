@@ -35,7 +35,7 @@ Feature: Login to Solar Stage and Configure Settings
   # SECTION 2: DEPARTMENT
   # ══════════════════════════════════════════════════
 
-  @E2ETC2003 @settings @department @smoke1
+  @E2ETC2003 @settings @department @smoke
   Scenario: TC-DEPT-001 - Create a new root department
     Given user navigates to Settings and opens the Department tab
     When user clicks the Create New department button
@@ -53,7 +53,7 @@ Feature: Login to Solar Stage and Configure Settings
     Then verify department "Child" is created successfully
     And user close the window
 
-  @E2ETC2005 @settings @department @smoke1
+  @E2ETC2005 @settings @department @smoke
   Scenario: TC-DEPT-003 - Search for a department in the list
     Given user navigates to Settings and opens the Department tab
     When user searches for department "Parent"
@@ -136,32 +136,110 @@ Feature: Login to Solar Stage and Configure Settings
     Then verify product appears in the product list
     And user close the window
 
-  # ------------------------------------------------------------------DONE----------------------------------------------------------------------------------------
-
   # ══════════════════════════════════════════════════
   # SECTION 6: Position
   # ══════════════════════════════════════════════════
 
-  @E2ETC2011 @settings @position @smoke
+  @E2ETC2012 @settings @position @smoke
   Scenario: TC-POS-001 - Create a new position with basic details and pay configuration
     Given user navigates to Settings and opens the Position tab
     When user clicks the Add New position button
-    And user enters position name "QA_Setter_Position"
-    And user enters position description "Position created for QA regression testing"
-    And user selects pay type "Per Watt"
-    And user enters upfront pay "3.50"
-    And user selects position department "N/A"
-    And user selects position product "N/A"
-    And user selects position tier schema "N/A"
-    And user selects position milestone schema "N/A"
-    And user enters position effective date as today
-    And user clicks the Save position button
-    Then verify position is created successfully
-    And user close the window
+    And user enters position name "QA_Pos"
+    And user enters custom products created
+    And user selects Worker type "1099"
+    And user selects pay frequency "Monthly"
+    And user selects position department
+    And user selects position main role "Self Gen"
+    And user selects position permission group "Super Admin"
+    And user enters next button for new position
+    # completing Tier Schema page
+    Then verify the Select Tier Schemas modal is displayed
+    And  user "enables" Commission Tiers
+    And  user selects Commission Tier Schema
+    And  user selects Commission Tier Advancement "All sales of this product"
+    And  user "enables" Upfront Tiers
+    And  user selects Upfront Tier Schema
+    And  user selects Upfront Tier Advancement "All sales of this product"
+    And  user "enables" Override Tiers
+    And  user selects Override Tier Schema
+    And  user selects Override Tier Advancement "All sales of this product"
+    And  user clicks Create on Select Tier Schemas modal
+    # Completing Wadges
+    And   user "enables" the Wages toggle in position setup
+    And   user selects wages type "Hourly" in position setup
+    And   user enters wages amount "20.00" in position setup
+    And   user enters pto hours as "5"
+    And   user select unused pto as "Expires Monthly"
+    And   user clicks Save and Continue in position setup
+    # Setting Up commission
+    And   user "enables" the Commission toggle in position setup
+    And   user enters commission default amount "10" for "Setter"
+    And   user selects commission default type "Percent" for "Setter"
+    And   user clicks on Next in position setup
+    And   user enters commission default amount "10" for "Closer"
+    And   user selects commission default type "Percent" for "Closer"
+    And   user clicks on Next in position setup
+    And   user enters commission default amount "10" for "Self Gen"
+    And   user selects commission default type "Percent" for "Self Gen"
+    And   user clicks on Next in position setup
+    And   user enters commission default amount "10" for "Setter"
+    And   user selects commission default type "Percent" for "Setter"
+    And   user clicks on Next in position setup
+    And   user enters commission default amount "10" for "Closer"
+    And   user selects commission default type "Percent" for "Closer"
+    And   user clicks on Next in position setup
+    And   user enters commission default amount "10" for "Self Gen"
+    And   user selects commission default type "Percent" for "Self Gen"
+    And   user clicks Submit button in position setup
 
-  @E2ETC2012 @settings @position @smoke
+  @E2ETC2013 @settings @position @smoke
   Scenario: TC-POS-002 - Search for a position in the list
     Given user navigates to Settings and opens the Position tab
     When user searches for position
     Then verify position appears in the position list
+    And user close the window
+
+  # ------------------------------------------------------------------DONE----------------------------------------------------------------------------------------
+
+  @E2ETC2014 @hiring @direct-hire @smoke
+  Scenario: TC-HIRE-001 - Hire a new rep directly with all details
+    Given user navigates to Hiring and opens Onboarding Employees tab
+    # ── Step 1: Details Tab ──
+    When user clicks the Hire New button
+    And user enters first name "QA_First"
+    And user enters last name "Last"
+    And user enters personal email "aman.k++@sequifi.com"
+    And user enters phone number "1234567890"
+    And user selects office state "Alabama"
+    And user selects office name first available
+    And user clicks Save and Continue on Details tab
+    # ── Step 2: Organization Tab ──
+    And user selects department "Sales"
+    And user selects position first available
+    And user selects manager first available
+    And user clicks Save and Continue on Organization tab
+    # ── Step 3: Redline Tab ──
+    And user fills redline for all roles with value "2.50" and type "Fixed"
+    And user clicks Save and Continue on Redline tab
+    # ── Step 4: Commission Tab ──
+    And user clicks Next on Commission tab
+    # ── Step 5: Upfront Tab ──
+    And user clicks Next on Upfront tab
+    # ── Step 6: Overrides Tab ──
+    And user clicks Next on Overrides tab
+    # ── Step 7: Agreement Tab ──
+    And user fills agreement details
+    And user clicks Save and Continue on Agreement tab
+    # ── Step 8: Additional Information Tab ──
+    And user clicks Save and Continue on Additional Information tab
+    # ── Step 9: Review & Finish Tab ──
+    And user clicks Finish to complete hiring
+    Then verify rep is hired successfully
+    And user close the window
+
+  @E2ETC2015 @hiring @search
+  Scenario: TC-HIRE-002 - Search for the hired rep in onboarding list
+    Given user navigates to Hiring and opens Onboarding Employees tab
+    When user searches for hired rep
+    Then verify hired rep appears in the onboarding list
     And user close the window

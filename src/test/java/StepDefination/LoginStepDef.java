@@ -15,10 +15,14 @@ public class LoginStepDef extends pgGeneric {
     pgLogin pgLoginObj = new pgLogin();
 
     private static final Map<String, String> ENVIRONMENT_URLS = Map.of(
-        "Solar Stage",  "https://solarstage.sequifi.com/auth",
-        "Pest Stage",   "http://peststage.sequifi.com",
-        "Turf Stage",   "https://turfstage.sequifi.com/admin-dashboard",
-        "Fiber Stage",  "http://fiberstage.sequifi.com"
+            "Fiber Stage",  "http://localhost:3000/auth",
+            "Pest Stage",   "http://localhost:3000/auth",
+            "Turf Stage",   "http://localhost:3000/auth",
+            "Solar Stage",  "http://localhost:3000/auth"
+            //            "Solar Stage",  "https://solarstage.sequifi.com/auth",
+//        "Pest Stage",   "http://peststage.sequifi.com",
+//        "Turf Stage",   "https://turfstage.sequifi.com/admin-dashboard",
+//        "Fiber Stage",  "http://fiberstage.sequifi.com"
     );
 
     private static final Map<String, String> PASSWORD_KEYS = Map.of(

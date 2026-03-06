@@ -57,6 +57,20 @@ public class pgGeneric {
         }
     }
 
+    public static WebElement getElement(String xpath, String text) {
+        String resolvedXpath = xpath.replace("[%s]", text);
+        return getExplicitWait(10).until(ExpectedConditions.elementToBeClickable(
+            By.xpath(resolvedXpath)
+        ));
+    }
+
+    public static void click(By locator) {
+        WebDriverWait wait = getExplicitWait(10);
+        WebElement clickLocator  = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        clickLocator.click();
+        test.log(Status.INFO, "Clicked: " + clickLocator.getText());
+    }
+
     public static void refreshPage() {
         driver.navigate().refresh();
         test.log(Status.INFO, "Page is Refreshed");
@@ -151,10 +165,12 @@ public class pgGeneric {
         } else {
             // Custom dropdown
             element.click();
-            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+            pause(1);
+            WebElement option = wait.until(ExpectedConditions.presenceOfElementLocated(
                     By.xpath("//li[normalize-space(.)='" + visibleText + "']")
             ));
-            option.click();
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
         }
 
         test.log(Status.INFO, "Selected: " + visibleText);
@@ -317,5 +333,70 @@ public class pgGeneric {
     public void selectFutureDateByLabel(String label, int daysAhead) {
         enterDateByLabel(label, daysFromToday(daysAhead));
         test.log(Status.INFO, "Entered date: " + daysFromToday(daysAhead));
+    }
+
+
+    //-----------------------------------Switch Frame -----------------------------------------
+    /**
+     * Switch into a frame by its name or id attribute
+     */
+    public static void switchToFrameByNameOrId(String nameOrId) {
+        WebDriverWait wait = getExplicitWait(10);
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(nameOrId));
+        test.log(Status.INFO, "Switched to frame by name/id: " + nameOrId);
+    }
+
+    /**
+     * Switch into a frame by locating its WebElement first
+     */
+    public static void switchToFrameByLocator(By frameLocator) {
+        WebDriverWait wait = getExplicitWait(10);
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+        test.log(Status.INFO, "Switched to frame by locator: " + frameLocator);
+    }
+
+    /**
+     * switch to given locator
+     */
+    public static void switchToLocator(By locator) {
+        WebDriverWait wait = getExplicitWait(10);
+        WebElement goLocator = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        goLocator.click();
+        test.log(Status.INFO, "Switched to locator: " + locator);
+    }
+
+    /**
+     * Switch back to the main page (exit all frames)
+     */
+    public static void switchToDefaultContent() {
+        driver.switchTo().defaultContent();
+        test.log(Status.INFO, "Switched back to default content (main page).");
+    }
+
+    /**
+     * Switch to the immediate parent frame
+     * (use when nested inside multiple frames)
+     */
+    public static void switchToParentFrame() {
+        driver.switchTo().parentFrame();
+        test.log(Status.INFO, "Switched to parent frame.");
+    }
+
+    // ── Toggle helpers ────────────────────────────────────────────────────────
+
+    public boolean isToggleOn(By toggleLocator) {
+        WebElement toggle = driver.findElement(toggleLocator);
+        String cls = toggle.getDomAttribute("aria-checked");
+        return cls != null && (cls.contains("checked") || cls.contains("active") || cls.contains("on") || cls.contains("true"));
+    }
+
+    public void setToggle(By toggleLocator, boolean enable, String label) {
+        WebDriverWait wait = getExplicitWait(10);
+        WebElement toggle = wait.until(ExpectedConditions.elementToBeClickable(toggleLocator));
+        if (isToggleOn(toggleLocator) != enable) {
+            toggle.click();
+            pause(1);
+        }
+        test.log(Status.PASS, label + " Tiers toggle set to: " + (enable ? "ON" : "OFF"));
     }
 }
