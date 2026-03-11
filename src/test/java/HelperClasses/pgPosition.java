@@ -74,13 +74,12 @@ public class pgPosition extends pgGeneric {
     public void navigateToPositionTab() {
         WebDriverWait wait = getExplicitWait(30);
 
-        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(SETTINGS_MENU));
-        settingsLink.click();
-        test.log(Status.INFO, "Clicked Settings menu.");
-        pause(2);
+//        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(SETTINGS_MENU));
+//        settingsLink.click();
+//        test.log(Status.INFO, "Clicked Settings menu.");
+//        pause(2);
 
         WebElement positionTab = wait.until(ExpectedConditions.elementToBeClickable(POSITION_TAB));
-//        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", positionTab);
         positionTab.click();
         test.log(Status.INFO, "Clicked Position tab.");
         pause(2);
@@ -137,14 +136,14 @@ public class pgPosition extends pgGeneric {
     }
 
     public void selectDepartment() {
-//        selectByVisibleText(DEPARTMENT_DROPDOWN, pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
-        selectByPartialText(DEPARTMENT_DROPDOWN, "HR");
+        selectByVisibleText(DEPARTMENT_DROPDOWN, pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
+//        selectByPartialText(DEPARTMENT_DROPDOWN, "HR");
         test.log(Status.PASS, "Product is Set as: " + pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
     }
 
     public void selectProduct() {
-//        selectByVisibleText(PRODUCT_DROPDOWN, pgProjectExpectedVariables.getProdName("Product Name"));
-        selectByVisibleText(PRODUCT_DROPDOWN, "Test");
+        selectByVisibleText(PRODUCT_DROPDOWN, pgProjectExpectedVariables.getProdName("Product Name"));
+//        selectByVisibleText(PRODUCT_DROPDOWN, "Test");
         click(PRODUCT_DROPDOWN);
         test.log(Status.PASS, "Product is Set as: " + pgProjectExpectedVariables.getProdName("Product Name"));
     }
@@ -181,7 +180,7 @@ public class pgPosition extends pgGeneric {
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(SAVE_BUTTON));
         btn.click();
         test.log(Status.INFO, "Clicked Save/Create position button.");
-        pause(2);
+        pause(1);
     }
 
     public void clickNextButton() {
@@ -189,7 +188,7 @@ public class pgPosition extends pgGeneric {
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(NEXT_BUTTON));
         btn.click();
         test.log(Status.INFO, "Clicked Next position button.");
-        pause(2);
+        pause(1);
     }
 
     // ==================== Verification ====================

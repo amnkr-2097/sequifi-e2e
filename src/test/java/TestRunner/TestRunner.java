@@ -4,8 +4,9 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-    tags = "@smoke",
-    features = {"Feature File/E2ETC200.feature"},
+    tags = "@SolarE2E",
+    features = {"Feature File/SolarEndToEnd.feature"},
+//        features = {"Feature File/E2ETC200.feature"},
     glue = {"StepDefination"},
     plugin = {
         "pretty",

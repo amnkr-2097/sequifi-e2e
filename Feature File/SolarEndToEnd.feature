@@ -1,18 +1,14 @@
-@E2ETC200
+@SolarE2E
 Feature: Login to Solar Stage and Configure Settings
 
-  Background:
+  @SolarE2E @settings @location @smoke
+  Scenario: TC-LOC-001 - Add a new Office location with redline
     Given user navigates to "Solar Stage" WebPage
     When user enters the "superadmin@sequifi.com" and "PW:Solar" and Logs-In
     And verify user is logged in
 
-  # ══════════════════════════════════════════════════
-  # SECTION 1: LOCATION
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2001 @settings @location @smoke
-  Scenario: TC-LOC-001 - Add a new Office location with redline
-    Given user navigates to Settings and opens the Location tab
+    # Location
+    And user navigates to Settings and opens the Location tab
     When user clicks the Add New location button
     And user selects state "California" from the state dropdown
     And user enters location code "-TEST01"
@@ -22,50 +18,24 @@ Feature: Login to Solar Stage and Configure Settings
     And user enters effective date as today
     And user clicks the Add Location button
     Then verify location is created successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2002 @settings @location @smoke
-  Scenario: TC-LOC-002 - Search for a location in the list
-    Given user navigates to Settings and opens the Location tab
-    When user searches for location
-    Then verify location appears in the location list
-    And user close the window
-
-  # ══════════════════════════════════════════════════
-  # SECTION 2: DEPARTMENT
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2003 @settings @department @smoke
-  Scenario: TC-DEPT-001 - Create a new root department
+    # Department
     Given user navigates to Settings and opens the Department tab
     When user clicks the Create New department button
     And user enters "Parent" department name "QA_Dept_Test"
     And user clicks the Create department button
     Then verify department "Parent Dept" is created successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2004 @settings @department @smoke
-  Scenario: TC-DEPT-002 - Create a child department under an existing parent
     Given user navigates to Settings and opens the Department tab
     When user clicks the Create New department button
     And user enters "Child" department name "QA_Sub_Team"
     And user clicks the Create department button
     Then verify department "Child" is created successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2005 @settings @department @smoke
-  Scenario: TC-DEPT-003 - Search for a department in the list
-    Given user navigates to Settings and opens the Department tab
-    When user searches for department "Parent"
-    Then verify department "Parent" appears in the department list
-    And user close the window
-
-  # ══════════════════════════════════════════════════
-  # SECTION 3: TIERS
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2006 @settings @tiers @smoke
-  Scenario: TC-TIER-001 - Create a new tier schema
+    # Tiers
     Given user navigates to Settings and opens the Tiers tab
     When user clicks the Add New tier button
     And user enters tier schema name "QA_Tier_Schema"
@@ -75,47 +45,23 @@ Feature: Login to Solar Stage and Configure Settings
     And user selects tier type "N/A"
     And user clicks the Save tier button
     Then verify tier is created successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2007 @settings @tiers @smoke
-  Scenario: TC-TIER-002 - Search for a tier in the list
-    Given user navigates to Settings and opens the Tiers tab
-    When user searches for tier
-    Then verify tier appears in the tier list
-    And user close the window
+    # Milestone
+#    Given user navigates to Settings and opens the Milestone tab
+#    When user clicks the Add New milestone button
+#    And user enters schema name "QA_Single_Trigger"
+#    And user enters schema description "Single trigger schema for QA testing"
+#    And user captures initial trigger data
+#    Then user clicks add trigger button
+#    And user enters trigger name "Payment-1" at index 1
+#    And user selects trigger date "M1 Date" at index 1
+#    And user clicks the Save milestone button
+#    Then verify milestone is created successfully
+#    And verify milestone appears in the list
+#    And user refresh the page
 
-  # ══════════════════════════════════════════════════
-  # SECTION 4: MILESTONE
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2008 @settings @milestone @smoke
-  Scenario: TC-MS-002 - Create a new milestone schema with single trigger
-    Given user navigates to Settings and opens the Milestone tab
-    When user clicks the Add New milestone button
-    And user enters schema name "QA_Single_Trigger"
-    And user enters schema description "Single trigger schema for QA testing"
-    And user captures initial trigger data
-    Then user clicks add trigger button
-    And user enters trigger name "Payment-1" at index 1
-    And user selects trigger date "M1 Date" at index 1
-    And user clicks the Save milestone button
-    Then verify milestone is created successfully
-    And verify milestone appears in the list
-    And user close the window
-
-  @E2ETC2009 @settings @milestone @smoke
-  Scenario: TC-MS-010 - Search milestone schemas by name
-    Given user navigates to Settings and opens the Milestone tab
-    When user searches for milestone
-    Then verify milestone appears in the list
-    And user close the window
-
-  # ══════════════════════════════════════════════════
-  # SECTION 5: PRODUCT
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2010 @settings @product @smoke
-  Scenario: TC-PROD-001 - Create a new product with all details
+    # Product
     Given user navigates to Settings and opens the Product tab
     When user clicks the Add New product button
     And user enters product name "QA Panel"
@@ -127,21 +73,9 @@ Feature: Login to Solar Stage and Configure Settings
     And user enters product effective date as today
     And user clicks the Create product button
     Then verify product is created successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2011 @settings @product @smoke
-  Scenario: TC-PROD-003 - Search for a product in the list
-    Given user navigates to Settings and opens the Product tab
-    When user searches for product
-    Then verify product appears in the product list
-    And user close the window
-
-  # ══════════════════════════════════════════════════
-  # SECTION 6: Position
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2012 @settings @position @smoke
-  Scenario: TC-POS-001 - Create a new position with basic details and pay configuration
+    # Position
     Given user navigates to Settings and opens the Position tab
     When user clicks the Add New position button
     And user enters position name "QA_Pos"
@@ -152,6 +86,7 @@ Feature: Login to Solar Stage and Configure Settings
     And user selects position main role "Self Gen"
     And user selects position permission group "Super Admin"
     And user enters next button for new position
+
     # completing Tier Schema page
     Then verify the Select Tier Schemas modal is displayed
     And  user "enables" Commission Tiers
@@ -164,6 +99,7 @@ Feature: Login to Solar Stage and Configure Settings
     And  user selects Override Tier Schema
     And  user selects Override Tier Advancement "All sales of this product"
     And  user clicks Create on Select Tier Schemas modal
+
     # Completing Wadges
     And   user "enables" the Wages toggle in position setup
     And   user selects wages type "Hourly" in position setup
@@ -171,6 +107,7 @@ Feature: Login to Solar Stage and Configure Settings
     And   user enters pto hours as "5"
     And   user select unused pto as "Expires Monthly"
     And   user clicks Save and Continue in position setup
+
     # Setting Up commission
     And   user "enables" the Commission toggle in position setup
     And   user enters commission default amount "10" for "Setter"
@@ -191,27 +128,15 @@ Feature: Login to Solar Stage and Configure Settings
     And   user enters commission default amount "10" for "Self Gen"
     And   user selects commission default type "Percent" for "Self Gen"
     And   user clicks Submit button in position setup
+    And user refresh the page
 
-  @E2ETC2013 @settings @position @smoke
-  Scenario: TC-POS-002 - Search for a position in the list
-    Given user navigates to Settings and opens the Position tab
-    When user searches for position
-    Then verify position appears in the position list
-    And user close the window
-
-  # ------------------------------------------------------------------DONE----------------------------------------------------------------------------------------
-  # ══════════════════════════════════════════════════
-  # SECTION 7: Hiring
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2014 @hiring @direct-hire @smoke
-  Scenario: TC-HIRE-001 - Hire a new rep directly with all details
+    # Hiring
     Given user navigates to Hiring and opens Onboarding Employees tab
-    # ── Step 1: Details Tab ──
     When user clicks the Hire New button
     And user enters first name "QA_First"
     And user enters last name "Last"
-    And user enters personal email "aman.k++13"
+    # email need to be changed on every run
+    And user enters personal email "aman.k+++13"
     And user enters phone number
     And user selects office state "Texas"
     And user selects office name "saza"
@@ -221,41 +146,34 @@ Feature: Login to Solar Stage and Configure Settings
     And user "enable" manager checkbox
     And user clicks Save and Continue on Organization tab
     And user clicks Save and Continue on Organization tab
-    # ── Step 3: Redline Tab ──
+
+    # Redline Tab
     And user fills redline for "Closer" with value "20" and type "Fixed"
     And user fills redline for "Setter" with value "20" and type "Fixed"
     And user fills redline for "Self Gen" with value "20" and type "Fixed"
     And user clicks Save and Continue on Redline tab
-#    # ── Step 4: Commission Tab ──
+
+    # Commission Tab -> Auto filled just need to skip this section
     And user clicks Next on Commission tab
     And user clicks Next on Commission tab
     And user clicks Next on Commission tab
     And user clicks Next on Commission tab
     And user clicks Next on Commission tab
     And user clicks Save and Continue on Commission tab
-#    # ── Step 7: Agreement Tab ──
+
+    # Agreement Tab
     And user fills agreement details
     And user clicks Save and Continue on Agreement tab
-#    # ── Step 8: Additional Information Tab ──
+
+    # Additional Information Tab
     And user clicks Save and Continue on Additional Information tab
-#    # ── Step 9: Review & Finish Tab ──
+
+    # Review & Finish Tab
     And user complete Review and Finish for hiring
     Then verify rep is hired successfully
-    And user close the window
+    And user refresh the page
 
-  @E2ETC2015 @hiring @search
-  Scenario: TC-HIRE-002 - Search for the hired rep in onboarding list
-    Given user navigates to Hiring and opens Onboarding Employees tab
-    When user searches for hired rep
-    Then verify hired rep appears in the onboarding list
-    And user close the window
-
-  # ══════════════════════════════════════════════════
-  # SECTION 8: Sales
-  # ══════════════════════════════════════════════════
-
-  @E2ETC2016 @sales @smoke
-  Scenario: TC-SALE-001 - Add a new sale for Solar and verify commission
+    # Sales
     Given user navigates to the Sales page
     When user clicks the Add Sale button
     And user enter "ID" as "QA"

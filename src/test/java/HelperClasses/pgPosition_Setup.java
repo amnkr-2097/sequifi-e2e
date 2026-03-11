@@ -173,7 +173,7 @@ public class pgPosition_Setup extends pgGeneric {
     // ═══════════════════════════════════════════════════════════════
 
     public void enableWages(boolean enable) {
-        pause(3);
+        pause(1);
         setToggle(WAGES_TOGGLE, enable, "Wages");
         pgProjectExpectedVariables.setPosSetupWagesEnabled("Wages Enabled", String.valueOf(enable));
     }
@@ -386,11 +386,11 @@ public class pgPosition_Setup extends pgGeneric {
         pause(1);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
         test.log(Status.INFO, "Clicked Next button.");
-        pause(2);
+        pause(1);
     }
 
     public void clickOnNextSetUp() {
-        pause(2);
+        pause(1);
         WebElement btn = getExplicitWait(10).until(ExpectedConditions.presenceOfElementLocated(NEXT_BUTTON_SETUP));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", btn);
         pause(1);
@@ -416,7 +416,7 @@ public class pgPosition_Setup extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         wait.until(ExpectedConditions.elementToBeClickable(SAVE_AND_CONTINUE_BUTTON)).click();
         test.log(Status.PASS, "Clicked 'Save & Continue' button.");
-        pause(2);
+        pause(1);
     }
 
     public void closePositionSetupModal() {
@@ -444,6 +444,6 @@ public class pgPosition_Setup extends pgGeneric {
         searchField.clear();
         searchField.sendKeys(str);
         test.log(Status.PASS, "Searched for Milestone: " + str);
-        pause(2);
+        pause(1);
     }
 }

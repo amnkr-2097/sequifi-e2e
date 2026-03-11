@@ -5,6 +5,7 @@ import HelperClasses.pgLogin;
 import com.aventstack.extentreports.Status;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.*;
 
@@ -18,7 +19,9 @@ public class LoginStepDef extends pgGeneric {
             "Fiber Stage",  "http://localhost:3000/auth",
             "Pest Stage",   "http://localhost:3000/auth",
             "Turf Stage",   "http://localhost:3000/auth",
-            "Solar Stage",  "http://localhost:3000/auth"
+//            "Solar Stage",  "http://localhost:3000/auth",
+            "Solar Stage",  "https://solarstage.sequifi.com/auth",
+            "Roofing Stage", "http://localhost:3000/auth"
             //            "Solar Stage",  "https://solarstage.sequifi.com/auth",
 //        "Pest Stage",   "http://peststage.sequifi.com",
 //        "Turf Stage",   "https://turfstage.sequifi.com/admin-dashboard",
@@ -30,6 +33,7 @@ public class LoginStepDef extends pgGeneric {
         "PW:Pest",   "Peststage#1190",
         "PW:Turf",   "Frdmturf#1190",
         "PW:Fiber",  "Embrase#1190",
+        "PW:Roof", "Texas#1100",
         "PW:Empty",  ""
     );
 
@@ -87,5 +91,10 @@ public class LoginStepDef extends pgGeneric {
     public void tearDown() {
         flushReport();
         quitDriver();
+    }
+
+    @And("user refresh the page")
+    public void userRefreshThePage() {
+        refreshPage();
     }
 }

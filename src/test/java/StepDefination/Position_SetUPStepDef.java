@@ -42,7 +42,8 @@ public class Position_SetUPStepDef extends pgGeneric {
 
     // ── Wages Tab ────────────────────────────────────────────────────────────
     @And("user {string} the Wages toggle in position setup")
-    public void userSetsWagesToggle(String state)      {
+    public void userSetsWagesToggle(String state) {
+        pause(2);
         pgPosSetup.enableWages(state.equalsIgnoreCase("enables"));
     }
 

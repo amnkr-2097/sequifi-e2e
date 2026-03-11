@@ -14,7 +14,8 @@ public class pgHiring extends pgGeneric {
     // ══════════════════════════════════════════════════
     // NAVIGATION
     // ══════════════════════════════════════════════════
-
+    private static final By SWITCH_TO_ADMIN    = By.xpath("(//*[contains(text(),'switch to admin') or contains(text(),'Switch to Admin')])[1]");
+    private static final By SWITCH_TO_STANDARD = By.xpath("(//*[contains(text(),'switch to standard') or contains(text(),'Switch to Standard')])[1]");
     private static final By HIRING_MODULE = By.xpath(
             "//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'hiring')] | " +
                     "//span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'hiring')]/ancestor::a"
@@ -36,8 +37,8 @@ public class pgHiring extends pgGeneric {
     private static final By LAST_NAME_INPUT   = By.id("onboard_employees_details_tab_Last_Name");
     private static final By EMAIL_INPUT       = By.id("onboard_employees_details_tab_Personal_Email");
     private static final By PHONE_INPUT       = By.id("onboard_employees_details_tab_Phone_Number");
-    private static final By STATE_DROPDOWN    = By.id("onboard_employees_details_tab_Office_Location");
-    private static final By OFFICE_DROPDOWN   = By.id("onboard_employees_details_tab_office_name");
+    private static final By STATE_DROPDOWN    = By.xpath("//*[@id ='onboard_employees_details_tab_Office_Location']");
+    private static final By OFFICE_DROPDOWN   = By.xpath("//*[@id ='onboard_employees_details_tab_office_name']");
 
     // ══════════════════════════════════════════════════
     // TAB 2: ORGANIZATION
@@ -47,8 +48,8 @@ public class pgHiring extends pgGeneric {
     private static final By POSITION_DROPDOWN    = By.id("onboard_employees_organization_tab_Position");
     private static final By MANAGER_DROPDOWN     = By.id("onboard_employees_organization_tab_Select_manger");
     private static final By TEAM_DROPDOWN        = By.id("onboard_employees_organization_tab_select_team");
-    private static final By IS_MANAGER_CHECKBOX  = By.cssSelector("input[name='is_manager']");
-    private static final By RECRUITER_INPUT      = By.cssSelector("input[placeholder='Select recruiter']");
+    private static final By IS_MANAGER_CHECKBOX  = By.xpath("//*[@id='onboard_employees_organization_tab_IsUserManager']//label");
+    private static final By RECRUITER_INPUT      = By.id("onboard_employees_organization_tab_select_recruiter");
 
     // ══════════════════════════════════════════════════
     // TAB 3: REDLINE
@@ -58,15 +59,23 @@ public class pgHiring extends pgGeneric {
     private static final By REDLINE_TYPE_DD    = By.id("onboard_employees_redline_tab_redline_type");
 
     // ══════════════════════════════════════════════════
+    // TAB 3: Review & Finish
+    // ══════════════════════════════════════════════════
+
+    private static final By TXT_ENTER_NAME = By.xpath("//*[@id= 'onboard_employees_review_&_finish_tab_enter_your_name']");
+    private static final By CHECK_ACKNOWLEDGE = By.xpath("//*[@id= 'onboard_employees_review_&_finish_tab_isAcknowledged']//label");
+    private static final By HIRE_DIRECTLY = By.xpath("//button[@id = 'onboard_employees_review_&_finish_tab_hire_directly']");
+
+    private static final By PERIOD_OF_AGREEMENT = By.xpath("//*[@id='onboard_employees_agreement_tab_Period of Agreement']//input[@placeholder='Period of Agreement']");
+    private static final By OFFER_EXPIRY_DATE = By.xpath("//*[@id='onboard_employees_agreement_tab_offer_expiry_date']//input[@placeholder='MM/DD/YYYY']");
+
+
+    // ══════════════════════════════════════════════════
     // COMMON BUTTONS
     // ══════════════════════════════════════════════════
 
-    private static final By SAVE_AND_CONTINUE_BTN = By.xpath(
-            "//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'save & continue') or " +
-                    "contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'save and continue')]"
-    );
-    private static final By NEXT_BTN = By.xpath(
-            "//div[contains(@class,'p-dialog')]//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'next')]"
+    private static final By SAVE_AND_CONTINUE_BTN = By.xpath("//button[@id = 'onboard_employees_details_tab_Save_&_Continue']");
+    private static final By NEXT_BTN = By.xpath("//*[contains(text(),'Next')]"
     );
     private static final By BACK_BTN = By.xpath(
             "//div[contains(@class,'p-dialog')]//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'back') or " +
@@ -94,17 +103,18 @@ public class pgHiring extends pgGeneric {
 
     public void navigateToOnboardingEmployees() {
         WebDriverWait wait = getExplicitWait(15);
-
-        // Navigate directly to the hiring page
-        driver.get(driver.getCurrentUrl().split("/")[0] + "//" +
-                driver.getCurrentUrl().split("/")[2] + "/hiring");
-        pause(3);
+        pause(1);
+        click(SWITCH_TO_STANDARD);
+        WebElement hiringLink = wait.until(ExpectedConditions.elementToBeClickable(HIRING_MODULE));
+        hiringLink.click();
+        test.log(Status.INFO, "Clicked Hiring menu.");
+        pause(1);
 
         // Click Onboarding Employees tab
         WebElement onboardingTab = wait.until(ExpectedConditions.elementToBeClickable(ONBOARDING_TAB));
         onboardingTab.click();
         test.log(Status.INFO, "Clicked Onboarding Employees tab.");
-        pause(2);
+        pause(1);
     }
 
     public void clickHireNew() {
@@ -112,7 +122,7 @@ public class pgHiring extends pgGeneric {
         WebElement hireBtn = wait.until(ExpectedConditions.elementToBeClickable(HIRE_NEW_BUTTON));
         hireBtn.click();
         test.log(Status.PASS, "Clicked 'Hire New' button.");
-        pause(2);
+        pause(1);
     }
 
     // ══════════════════════════════════════════════════
@@ -123,7 +133,7 @@ public class pgHiring extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(FIRST_NAME_INPUT));
         field.clear();
-        String name = firstName + new Random().nextInt(100);
+        String name = firstName + new Random().nextInt(10000);
         field.sendKeys(name);
         pgProjectExpectedVariables.setHireFirstName("First Name", name);
         test.log(Status.PASS, "First Name set as: " + name);
@@ -133,7 +143,7 @@ public class pgHiring extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(LAST_NAME_INPUT));
         field.clear();
-        String name = lastName + new Random().nextInt(100);
+        String name = lastName + new Random().nextInt(10000);
         field.sendKeys(name);
         pgProjectExpectedVariables.setHireLastName("Last Name", name);
         test.log(Status.PASS, "Last Name set as: " + name);
@@ -143,63 +153,73 @@ public class pgHiring extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(EMAIL_INPUT));
         field.clear();
-        String email = emailPrefix + new Random().nextInt(10000) + "@sequifi.com";
+        String email = emailPrefix + "@sequifi.com";
         field.sendKeys(email);
         pgProjectExpectedVariables.setHireEmail("Email", email);
         test.log(Status.PASS, "Email set as: " + email);
     }
 
-    public void enterPhoneNumber(String phone) {
+    public void enterPhoneNumber() {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(PHONE_INPUT));
         field.clear();
-        field.sendKeys(phone);
-        pgProjectExpectedVariables.setHirePhone("Phone", phone);
-        test.log(Status.PASS, "Phone set as: " + phone);
+        String  phnNumber = new Random().nextInt(1000000000) + "0";
+        field.sendKeys(phnNumber);
+        pgProjectExpectedVariables.setHirePhone("Phone", phnNumber);
+        test.log(Status.PASS, "Phone set as: " + phnNumber);
     }
 
     public void selectState(String stateName) {
         WebDriverWait wait = getExplicitWait(10);
-        clickPrimeDropdownById("onboard_employees_details_tab_Office_Location");
-        selectPrimeDropdownOption(stateName);
+        selectByVisibleText(STATE_DROPDOWN,stateName);
         pgProjectExpectedVariables.setHireState("State", stateName);
         test.log(Status.PASS, "State selected: " + stateName);
     }
 
-    public void selectOfficeFirstAvailable() {
+    public void selectOffice(String name) {
         WebDriverWait wait = getExplicitWait(10);
-        pause(1); // Wait for office dropdown to populate after state selection
-        clickPrimeDropdownById("onboard_employees_details_tab_office_name");
-        String officeName = selectPrimeDropdownFirstOption();
-        pgProjectExpectedVariables.setHireOffice("Office", officeName);
-        test.log(Status.PASS, "Office selected: " + officeName);
+        pause(1);
+        scrollToElement(OFFICE_DROPDOWN);
+        pause(1);
+        selectByVisibleText(OFFICE_DROPDOWN,name);
+        pgProjectExpectedVariables.setHireOffice("Office", name);
+        test.log(Status.PASS, "Office selected: " + name);
     }
 
     // ══════════════════════════════════════════════════
     // TAB 2: ORGANIZATION METHODS
     // ══════════════════════════════════════════════════
 
-    public void selectDepartment(String departmentName) {
-        clickPrimeDropdownById("onboard_employees_organization_tab_Department");
-        selectPrimeDropdownOption(departmentName);
-        pgProjectExpectedVariables.setHireDepartment("Department", departmentName);
-        test.log(Status.PASS, "Department selected: " + departmentName);
-    }
-
-    public void selectPositionFirstAvailable() {
+    public void selectDepartment() {
         pause(1);
-        clickPrimeDropdownById("onboard_employees_organization_tab_Position");
-        String posName = selectPrimeDropdownFirstOption();
-        pgProjectExpectedVariables.setHirePosition("Position", posName);
-        test.log(Status.PASS, "Position selected: " + posName);
+        selectByVisibleText(DEPARTMENT_DROPDOWN, pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
+//        selectByVisibleText(DEPARTMENT_DROPDOWN, "Admin");
+        test.log(Status.PASS, "Department selected: " + pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
     }
 
-    public void selectManagerFirstAvailable() {
+    public void selectPosition() {
+        pause(1);
+        selectByVisibleText(POSITION_DROPDOWN, pgProjectExpectedVariables.getPosPositionName("Position Name"));
+//        selectByVisibleText(POSITION_DROPDOWN, "QA_AMAN_2010");
+        test.log(Status.PASS, "Position selected: " + pgProjectExpectedVariables.getPosPositionName("Position Name"));
+    }
+
+    public void selectManager() {
         pause(1);
         clickPrimeDropdownById("onboard_employees_organization_tab_Select_manger");
         String mgrName = selectPrimeDropdownFirstOption();
         pgProjectExpectedVariables.setHireManager("Manager", mgrName);
         test.log(Status.PASS, "Manager selected: " + mgrName);
+    }
+
+    public void checkManager(String check) {
+        pause(1);
+        WebElement checkManager = driver.findElement(IS_MANAGER_CHECKBOX);
+        if(check.equalsIgnoreCase("Enable")) {
+                checkManager.click();
+                test.log(Status.INFO, "Checkbox is being Checked");
+
+        }
     }
 
     // ══════════════════════════════════════════════════
@@ -210,39 +230,35 @@ public class pgHiring extends pgGeneric {
      * Fills redline value and type for all role tabs (Closer, Setter, Self Gen).
      * Each role tab needs its own redline value and type.
      */
-    public void fillRedlineForAllRoles(String redlineValue, String redlineType) {
+    public void fillRedlineForAllRoles(String role, String redlineValue, String redlineType) {
         WebDriverWait wait = getExplicitWait(10);
-        String[] roles = {"Closer", "Setter", "Self Gen"};
+        WebElement redlineInput = wait.until(ExpectedConditions.visibilityOfElementLocated(REDLINE_INPUT));
+        switch (role) {
+            case "Closer" :
+                setReactInputValue(redlineInput,redlineValue);
+                selectByVisibleText(REDLINE_TYPE_DD, redlineType);
+                pgProjectExpectedVariables.setHireCloserRedline("Closer Redline" , redlineValue);
+                test.log(Status.INFO, "Closer Redline Set as : " + redlineValue);
+                click(NEXT_BTN);
+                break;
+            case "Setter" :
+                setReactInputValue(redlineInput,redlineValue);
+                selectByVisibleText(REDLINE_TYPE_DD, redlineType);
+                pgProjectExpectedVariables.setHireSetterRedline("Setter Redline" , redlineValue);
+                test.log(Status.INFO, "Setter Redline Set as : " + redlineValue);
+                click(NEXT_BTN);
+                break;
+            case "Self Gen" :
+                setReactInputValue(redlineInput,redlineValue);
+                selectByVisibleText(REDLINE_TYPE_DD, redlineType);
+                pgProjectExpectedVariables.setHireSelfGenRedline("SelfGen Redline" , redlineValue);
+                test.log(Status.INFO, "SelfGen Redline Set as : " + redlineValue);
+                break;
+            default:
+                test.log(Status.INFO, "NOTHING FOUND");
 
-        for (String role : roles) {
-            try {
-                // Click the role tab
-                By roleTab = By.xpath(
-                        "//*[contains(@class,'p-dialog')]//*[normalize-space(text())='" + role + "']"
-                );
-                List<WebElement> roleTabs = driver.findElements(roleTab);
-                if (roleTabs.isEmpty()) {
-                    test.log(Status.INFO, "Role '" + role + "' tab not found, skipping.");
-                    continue;
-                }
-                roleTabs.get(0).click();
-                pause(1);
-
-                // Enter redline value using React native setter (standard sendKeys may not work)
-                WebElement redlineInput = wait.until(
-                        ExpectedConditions.visibilityOfElementLocated(REDLINE_INPUT)
-                );
-                setReactInputValue(redlineInput, redlineValue);
-
-                // Select redline type
-                clickPrimeDropdownById("onboard_employees_redline_tab_redline_type");
-                selectPrimeDropdownOption(redlineType);
-
-                test.log(Status.PASS, "Redline for '" + role + "': $" + redlineValue + " (" + redlineType + ")");
-            } catch (Exception e) {
-                test.log(Status.WARNING, "Could not set redline for '" + role + "': " + e.getMessage());
-            }
         }
+
     }
 
     // ══════════════════════════════════════════════════
@@ -252,24 +268,37 @@ public class pgHiring extends pgGeneric {
     public void fillAgreementDetails() {
         WebDriverWait wait = getExplicitWait(10);
         pause(1);
-
         // Agreement tab may have start date, offer letter fields
-        // Try to set start date as today
+        // Try to set start date
         try {
-            selectTodayByLabel("Start Date");
-            test.log(Status.INFO, "Set agreement start date as today.");
+            selectPastDate(PERIOD_OF_AGREEMENT, 15);
         } catch (Exception e) {
             test.log(Status.INFO, "No start date field found on Agreement tab or already set.");
         }
 
-        // Try to set effective date as today
+        // Try to set  date as today
         try {
-            selectTodayByLabel("Effective");
-            test.log(Status.INFO, "Set effective date as today.");
+            selectFutureDate(OFFER_EXPIRY_DATE, 30);
         } catch (Exception e) {
             test.log(Status.INFO, "No effective date field on Agreement tab.");
         }
     }
+
+    // ══════════════════════════════════════════════════
+    // TAB 7: Review & Finish Method
+    // ══════════════════════════════════════════════════
+
+    public void finishReviewTask() {
+        WebDriverWait wait = getExplicitWait(10);
+        pause(1);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(TXT_ENTER_NAME)).sendKeys("AMAN KUMAR");
+        pause(1);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(CHECK_ACKNOWLEDGE)).click();
+        pause(1);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(HIRE_DIRECTLY)).click();
+        pause(2);
+    }
+
 
     // ══════════════════════════════════════════════════
     // COMMON BUTTON CLICK METHODS
@@ -285,7 +314,7 @@ public class pgHiring extends pgGeneric {
             clickButtonByText("Save & Continue");
         }
         test.log(Status.INFO, "Clicked 'Save & Continue'.");
-        pause(3);
+        pause(1);
     }
 
     public void clickNext() {
@@ -297,7 +326,7 @@ public class pgHiring extends pgGeneric {
             clickButtonByText("Next");
         }
         test.log(Status.INFO, "Clicked 'Next'.");
-        pause(3);
+        pause(1);
     }
 
     public void clickFinish() {
@@ -309,7 +338,7 @@ public class pgHiring extends pgGeneric {
             clickButtonByText("Finish");
         }
         test.log(Status.INFO, "Clicked 'Finish'.");
-        pause(3);
+        pause(1);
     }
 
     // ══════════════════════════════════════════════════

@@ -83,7 +83,7 @@ public class pgMilestone extends pgGeneric{
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(SCHEMA_NAME_INPUT));
         field.clear();
-        String StrName  = name + (int) Math.floor(Math.random() * 100);
+        String StrName  = name + (int) Math.floor(Math.random() * 10000);
         field.sendKeys(StrName);
         pgProjectExpectedVariables.setMileSchemaName("Milestone Schema Name" , StrName);
         test.log(Status.PASS, "Milestone Scheme Name is Set as : " + StrName);

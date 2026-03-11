@@ -23,11 +23,11 @@ public class pgTiers extends pgGeneric {
     public void navigateToTiersTab() {
         WebDriverWait wait = getExplicitWait(15);
 
-        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
-        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
-        settingsLink.click();
-        test.log(Status.INFO, "Clicked Settings menu.");
-        pause(2);
+//        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
+//        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
+//        settingsLink.click();
+//        test.log(Status.INFO, "Clicked Settings menu.");
+//        pause(2);
 
         WebElement tiersTab = wait.until(ExpectedConditions.elementToBeClickable(TIERS_TAB));
         tiersTab.click();
@@ -47,7 +47,7 @@ public class pgTiers extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(SCHEMA_NAME_INPUT));
         field.clear();
-        String StrName  = name + (int) Math.floor(Math.random() * 100);
+        String StrName  = name + (int) Math.floor(Math.random() * 10000);
         field.sendKeys(StrName);
         pgProjectExpectedVariables.setTierSchemaName("Tier Schema Name" , StrName);
         test.log(Status.PASS, "Tier Scheme Name is Set as : " + StrName);

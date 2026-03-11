@@ -68,7 +68,7 @@ public class pgLocation extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(LOCATION_CODE_INPUT));
         field.clear();
-        String strCode = code + (int) Math.floor(Math.random() * 1000);
+        String strCode = code + (int) Math.floor(Math.random() * 10000);
         field.sendKeys(strCode);
         pgProjectExpectedVariables.setLocLocationCode("Location Code" , field.getDomAttribute("value"));
         test.log(Status.PASS, "Location code set as: " + pgProjectExpectedVariables.getLocLocationCode("Location Code"));

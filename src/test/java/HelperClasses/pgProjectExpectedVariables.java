@@ -105,6 +105,16 @@ public class pgProjectExpectedVariables {
     private static final Map<String, String> hireDepartment = new HashMap<>();
     private static final Map<String, String> hirePosition = new HashMap<>();
     private static final Map<String, String> hireManager = new HashMap<>();
+    private static final Map<String, String> hireSetterRedline = new HashMap<>();
+    private static final Map<String, String> hireCloserRedline = new HashMap<>();
+    private static final Map<String, String> hireSelfGenRedline = new HashMap<>();
+
+    // Variables for Sale
+    private static final Map<String, String> saleCustomerName = new HashMap<>();
+    private static final Map<String, String> saleID = new HashMap<>();
+    private static final Map<String, String> saleKW = new HashMap<>();
+    private static final Map<String, String> saleEPC = new HashMap<>();
+    private static final Map<String, String> saleNetEPC = new HashMap<>();
 
 
 
@@ -293,13 +303,33 @@ public class pgProjectExpectedVariables {
     public static void setHireOffice(String key, String value) {hireOffice.put(key, value);}
     public static String getHireOffice(String key) {return hireOffice.get(key);}
 
-    public static void setHireDepartment(String key, String value) {hireDepartment.put(key, value);}
-    public static String getHireDepartment(String key) {return hireDepartment.get(key);}
-
-    public static void setHirePosition(String key, String value) {hirePosition.put(key, value);}
-    public static String getHirePosition(String key) {return hirePosition.get(key);}
-
     public static void setHireManager(String key, String value) {hireManager.put(key, value);}
     public static String getHireManager(String key) {return hireManager.get(key);}
+
+    public static void setHireSetterRedline(String key, String value) {hireSetterRedline.put(key, value);}
+    public static String getHireSetterRedline(String key) {return hireSetterRedline.get(key);}
+
+    public static void setHireCloserRedline(String key, String value) {hireCloserRedline.put(key, value);}
+    public static String getHireCloserRedline(String key) {return hireCloserRedline.get(key);}
+
+    public static void setHireSelfGenRedline(String key, String value) {hireSelfGenRedline.put(key, value);}
+    public static String getHireSelfGenRedline(String key) {return hireSelfGenRedline.get(key);}
+
+
+    // Sale getters and setters
+    public static void setSaleCustomerName(String k, String v) { saleCustomerName.put(k, v); }
+    public static String getSaleCustomerName(String k)         { return saleCustomerName.get(k); }
+
+    public static void setSaleID(String k, String v) { saleID.put(k, v); }
+    public static String getSaleID(String k)         { return saleID.get(k); }
+
+    public static void setSaleKW(String k, String v) { saleKW.put(k, v); }
+    public static String getSaleKW(String k)         { return saleKW.get(k); }
+
+    public static void setSaleEPC(String k, String v) { saleEPC.put(k, v); }
+    public static String getSaleEPC(String k)         { return saleEPC.get(k); }
+
+    public static void setSaleNetEPC(String k, String v) { saleNetEPC.put(k, v); }
+    public static String getSaleNetEPC(String k)         { return saleNetEPC.get(k); }
 
 }

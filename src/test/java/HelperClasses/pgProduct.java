@@ -28,11 +28,11 @@ public class pgProduct extends pgGeneric {
     public void navigateToProductTab() {
         WebDriverWait wait = getExplicitWait(15);
 
-        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
-        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
-        settingsLink.click();
-        test.log(Status.INFO, "Clicked Settings menu.");
-        pause(2);
+//        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
+//        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
+//        settingsLink.click();
+//        test.log(Status.INFO, "Clicked Settings menu.");
+//        pause(2);
 
         WebElement productTab = wait.until(ExpectedConditions.elementToBeClickable(PRODUCT_TAB));
         productTab.click();
@@ -53,7 +53,7 @@ public class pgProduct extends pgGeneric {
         WebDriverWait wait = getExplicitWait(10);
         WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(NAME_INPUT));
         field.clear();
-        String StrName  = name + (int) Math.floor(Math.random() * 100);
+        String StrName  = name + (int) Math.floor(Math.random() * 10000);
         field.sendKeys(StrName);
         pgProjectExpectedVariables.setProdName("Product Name" , StrName);
         test.log(Status.INFO, "Entered product name: " + name);
@@ -92,18 +92,18 @@ public class pgProduct extends pgGeneric {
     }
 
     public void selectMilestoneSchema() {
-        selectByPartialText(MILESTONE_DROPDOWN, pgProjectExpectedVariables.getMileSchemaName("Milestone Schema Name"));
-        test.log(Status.PASS, "Milestone Schema is Set for the product as: " + pgProjectExpectedVariables.getMileSchemaName("Milestone Schema Name"));
+        selectByPartialText(MILESTONE_DROPDOWN, "MS-QA_Single_Trigger62");
+//        test.log(Status.PASS, "Milestone Schema is Set for the product as: " + pgProjectExpectedVariables.getMileSchemaName("Milestone Schema Name"));
     }
 
 
     public void selectOverrideEligibility() {
-        selectByVisibleText(OVERRIDE_ELIGIBILITY, pgProjectExpectedVariables.getMileMilestoneName_Initial("Milestone Trigger Name 1"));
-        test.log(Status.PASS, "Override Eligibility is Set for the product as: " + pgProjectExpectedVariables.getMileMilestoneName_Initial("Milestone Trigger Name 1"));
+        selectByVisibleText(OVERRIDE_ELIGIBILITY, "Final Payment");
+        test.log(Status.PASS, "Override Eligibility is Set for the product as: " + "Final Payment");
     }
 
     public void enterEffectiveDateToday() {
-        selectPastDate(EFFECTIVE_DATE,14);
+        selectPastDate(EFFECTIVE_DATE,15);
         pause(2);
         pgProjectExpectedVariables.setProdEffectiveDate("Product Effective Date", daysFromToday(-14));
         test.log(Status.PASS, "Entered product effective date: " + daysFromToday(-14));

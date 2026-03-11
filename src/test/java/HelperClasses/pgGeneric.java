@@ -11,7 +11,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -66,14 +65,19 @@ public class pgGeneric {
 
     public static void click(By locator) {
         WebDriverWait wait = getExplicitWait(10);
-        WebElement clickLocator  = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        WebElement clickLocator  = wait.until(ExpectedConditions.elementToBeClickable(locator));
         clickLocator.click();
-        test.log(Status.INFO, "Clicked: " + clickLocator.getText());
+        test.log(Status.INFO, "Clicked : " + clickLocator.getText() );
+
     }
 
     public static void refreshPage() {
         driver.navigate().refresh();
-        test.log(Status.INFO, "Page is Refreshed");
+    }
+
+    public static void refreshPageShortcut() {
+        ((JavascriptExecutor) driver).executeScript("location.reload()");
+        pause(3);
     }
 
     public static void quitDriver() {
@@ -90,9 +94,6 @@ public class pgGeneric {
     public static void pause(int timeInSeconds) {
         try {
             Thread.sleep(timeInSeconds * 1000L);
-            if (test != null) {
-                test.log(Status.INFO, "Paused for " + timeInSeconds + " second(s).");
-            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -121,7 +122,7 @@ public class pgGeneric {
             );
             pause(1);
 
-            String actualValue = dateField.getAttribute("value");
+            String actualValue = dateField.getDomAttribute("value");
             if (actualValue != null && !actualValue.isEmpty()) {
                 if (test != null) test.log(Status.INFO, "Set date via JS: " + actualValue);
                 return;
@@ -163,7 +164,9 @@ public class pgGeneric {
             // Native <select>
             new Select(element).selectByVisibleText(visibleText);
         } else {
-            // Custom dropdown
+            // Custom dropdown — scroll into view first to avoid sticky bar interception
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", element);
+            pause(1);
             element.click();
             pause(1);
             WebElement option = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -283,8 +286,6 @@ public class pgGeneric {
         input.sendKeys(Keys.chord(Keys.CONTROL, "a"));
         input.sendKeys(date);
         input.sendKeys(Keys.TAB);
-
-        test.log(Status.INFO, "Entered date: " + date);
     }
 
     // ---- Convenience: find by label text ----
@@ -296,13 +297,8 @@ public class pgGeneric {
                         "//*[normalize-space(text())='" + label + "']/following::input[1]"
         );
         enterDate(inputLocator, date);
-        test.log(Status.INFO, "Entered date: " + date);
     }
 
-
-    /*
-    /label[normalize-space(.)='Effective Date ']//input//*[normalize-space(text())='Effective Date ']/ancestor::div[1]//input//*[normalize-space(text())='Effective Date ']/following::input[1]
-     */
     // ---- Shortcut methods ----
 
     public void selectToday(By fieldLocator) {
@@ -399,4 +395,60 @@ public class pgGeneric {
         }
         test.log(Status.PASS, label + " Tiers toggle set to: " + (enable ? "ON" : "OFF"));
     }
+
+    public void scrollToElement(By locator) {
+        WebElement element = driver.findElement(locator);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        pause(1);
+    }
+
+    /**
+     * Logs multiple Expected vs Actual rows in ONE table.
+     * Usage: compareAndLog(new String[][] {
+     *     {"Total Commission", "320000.00", "$ 0.00"},
+     *     {"Final Payment",    "320000.00", "$ 0.00"}
+     * });
+     */
+    public static boolean compareAndLog(String[][] rows) {
+        boolean allPassed = true;
+
+        StringBuilder table = new StringBuilder();
+        table.append("<table style='border-collapse:collapse;'>")
+                .append("<tr style='background:#1a73e8;color:white;'>")
+                .append("<th style='padding:6px;border:1px solid #ddd;'>Field</th>")
+                .append("<th style='padding:6px;border:1px solid #ddd;'>Expected</th>")
+                .append("<th style='padding:6px;border:1px solid #ddd;'>Actual</th>")
+                .append("<th style='padding:6px;border:1px solid #ddd;'>Status</th></tr>");
+
+        for (String[] row : rows) {
+            String field    = row[0];
+            String expected = row[1];
+            String actual   = row[2];
+
+            String expClean = expected.replaceAll("[^0-9.]", "");
+            String actClean = actual.replaceAll("[^0-9.]", "");
+            boolean match   = expClean.equals(actClean);
+
+            String label;
+            String color;
+
+            if (match) {
+                label = "PASS"; color = "#e6f4ea";
+            } else {
+                label = "FAIL"; color = "#fce8e6"; allPassed = false;
+            }
+
+            table.append("<tr style='background:").append(color).append(";'>")
+                    .append("<td style='padding:6px;border:1px solid #ddd;'><b>").append(field).append("</b></td>")
+                    .append("<td style='padding:6px;border:1px solid #ddd;'>").append(expected).append("</td>")
+                    .append("<td style='padding:6px;border:1px solid #ddd;'>").append(actual).append("</td>")
+                    .append("<td style='padding:6px;border:1px solid #ddd;'><b>").append(label).append("</b></td>")
+                    .append("</tr>");
+        }
+
+        table.append("</table>");
+        test.log(allPassed ? Status.PASS : Status.FAIL, table.toString());
+        return allPassed;
+    }
+
 }

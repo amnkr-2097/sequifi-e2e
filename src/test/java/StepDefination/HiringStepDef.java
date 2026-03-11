@@ -15,7 +15,11 @@ public class HiringStepDef extends pgGeneric {
 
     @Given("user navigates to Hiring and opens Onboarding Employees tab")
     public void userNavigatesToHiringAndOpensOnboardingEmployeesTab() {
+        refreshPage();
         pgHiringObj.navigateToOnboardingEmployees();
+        pause(3);
+        refreshPageShortcut();
+        pause(1);
     }
 
     @When("user clicks the Hire New button")
@@ -40,9 +44,9 @@ public class HiringStepDef extends pgGeneric {
         pgHiringObj.enterPersonalEmail(emailPrefix);
     }
 
-    @And("user enters phone number {string}")
-    public void userEntersPhoneNumber(String phone) {
-        pgHiringObj.enterPhoneNumber(phone);
+    @And("user enters phone number")
+    public void userEntersPhoneNumber() {
+        pgHiringObj.enterPhoneNumber();
     }
 
     @And("user selects office state {string}")
@@ -50,9 +54,9 @@ public class HiringStepDef extends pgGeneric {
         pgHiringObj.selectState(state);
     }
 
-    @And("user selects office name first available")
-    public void userSelectsOfficeNameFirstAvailable() {
-        pgHiringObj.selectOfficeFirstAvailable();
+    @And("user selects office name {string}")
+    public void userSelectsOfficeName(String offName) {
+        pgHiringObj.selectOffice(offName);
     }
 
     @And("user clicks Save and Continue on Details tab")
@@ -62,19 +66,26 @@ public class HiringStepDef extends pgGeneric {
 
     // ── Tab 2: Organization ──
 
-    @And("user selects department {string}")
-    public void userSelectsDepartment(String department) {
-        pgHiringObj.selectDepartment(department);
+    @And("user selects department")
+    public void userSelectsDepartment() {
+        pgHiringObj.selectDepartment();
     }
 
-    @And("user selects position first available")
-    public void userSelectsPositionFirstAvailable() {
-        pgHiringObj.selectPositionFirstAvailable();
+    @And("user selects position")
+    public void userSelectsPosition() {
+        pgHiringObj.selectPosition();
     }
 
     @And("user selects manager first available")
     public void userSelectsManagerFirstAvailable() {
-        pgHiringObj.selectManagerFirstAvailable();
+        pgHiringObj.selectManager();
+    }
+
+    @And("user {string} manager checkbox")
+    public void selectCheckboxManager(String check) {
+        pause(2);
+        pgHiringObj.checkManager(check);
+        pause(2);
     }
 
     @And("user clicks Save and Continue on Organization tab")
@@ -84,13 +95,18 @@ public class HiringStepDef extends pgGeneric {
 
     // ── Tab 3: Redline ──
 
-    @And("user fills redline for all roles with value {string} and type {string}")
-    public void userFillsRedlineForAllRoles(String value, String type) {
-        pgHiringObj.fillRedlineForAllRoles(value, type);
+    @And("user fills redline for {string} with value {string} and type {string}")
+    public void userFillsRedlineForAllRoles(String role, String value, String type) {
+        pgHiringObj.fillRedlineForAllRoles(role, value, type);
     }
 
     @And("user clicks Save and Continue on Redline tab")
     public void userClicksSaveAndContinueOnRedlineTab() {
+        pgHiringObj.clickSaveAndContinue();
+    }
+
+    @And("user clicks Save and Continue on Commission tab")
+    public void userClicksSaveAndContinueOnCommissionTab() {
         pgHiringObj.clickSaveAndContinue();
     }
 
@@ -136,9 +152,9 @@ public class HiringStepDef extends pgGeneric {
 
     // ── Tab 9: Review & Finish ──
 
-    @And("user clicks Finish to complete hiring")
+    @And("user complete Review and Finish for hiring")
     public void userClicksFinishToCompleteHiring() {
-        pgHiringObj.clickFinish();
+        pgHiringObj.finishReviewTask();
     }
 
     // ── Verification ──

@@ -20,11 +20,11 @@ public class pgDepartment extends pgGeneric {
     public void navigateToDepartmentTab() {
         WebDriverWait wait = getExplicitWait(15);
 
-        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
-        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
-        settingsLink.click();
-        test.log(Status.PASS, "Clicked Settings menu.");
-        pause(2);
+//        By settingsMenu = By.xpath("//a[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')] | //span[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'settings')]/ancestor::a");
+//        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(settingsMenu));
+//        settingsLink.click();
+//        test.log(Status.PASS, "Clicked Settings menu.");
+//        pause(2);
 
         WebElement deptTab = wait.until(ExpectedConditions.elementToBeClickable(DEPARTMENT_TAB));
         deptTab.click();
@@ -45,7 +45,7 @@ public class pgDepartment extends pgGeneric {
         if (dept.contains("Parent")) {
             WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(DEPT_NAME_INPUT));
             field.clear();
-            String strName = name + (int) Math.floor(Math.random() * 100);
+            String strName = name + (int) Math.floor(Math.random() * 10000);
             field.sendKeys(strName);
             pgProjectExpectedVariables.setDeptParentDepartment("Parent Department Name", strName);
             test.log(Status.PASS, "Parent Department name set as : " + pgProjectExpectedVariables.getDeptParentDepartment("Parent Department Name"));
@@ -55,7 +55,7 @@ public class pgDepartment extends pgGeneric {
             pause(3);
             WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(DEPT_NAME_INPUT));
             field.clear();
-            String strName = name + (int) Math.floor(Math.random() * 100);
+            String strName = name + (int) Math.floor(Math.random() * 10000);
             field.sendKeys(strName);
             pgProjectExpectedVariables.setDeptChildDepartment("Child Department Name", strName);
             test.log(Status.PASS, "Child Department name set as : " + pgProjectExpectedVariables.getDeptChildDepartment("Child Department Name"));
